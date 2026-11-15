@@ -63,7 +63,11 @@ h2,p{margin:0}
 .window .scene .prop{font-size:clamp(13px,min(32cqw,10dvh),78px)}
 .window .picture{border-width:2px;border-radius:3px;font-size:clamp(8px,1.5vw,15px);line-height:1}
 .shutters{position:absolute;inset:0;background:var(--shutters) center/100% 100% no-repeat;pointer-events:none;transition:opacity .2s}
-.window.revealed .shutters{opacity:0}
+.window.revealed .scene{inset:5.75% 6.75% 6.75%;border:0}
+/* Keep the wooden surround from the shutter artwork and reveal the room inside. */
+.window.revealed .shutters{
+  clip-path:polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,6.75% 5.75%,6.75% 93.25%,93.25% 93.25%,93.25% 5.75%,6.75% 5.75%)
+}
 .night .shutters{filter:brightness(.53) saturate(.75)}
 .zoom{display:none;position:absolute;bottom:3px;left:4px;width:19px;height:19px;border-radius:6px;background:#fff5df;color:#442f53;font-size:14px;line-height:19px}
 .window.revealed .zoom{display:block}
