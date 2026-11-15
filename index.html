@@ -106,8 +106,6 @@ dialog .prop{font-size:clamp(40px,min(14vw,21dvh),155px)}
 .scene.painted-room{background:var(--room-art) center/cover no-repeat}
 .scene.painted-room::before,.scene.painted-room .picture{display:none}
 dialog .scene.painted-room{width:min(100%,62dvh,540px);height:auto;aspect-ratio:1;margin-inline:auto}
-/* Keep the zoom view close to the resolution of the level-two character art. */
-dialog .painted-room[data-art^="l2-"]{width:min(100%,62dvh,320px)}
 dialog .painted-room:is([data-art="l2-4"],[data-art="l2-5"]){width:min(100%,62dvh,400px)}
 dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
 .scene[data-art="1"]{--room-art:url("./image-004.webp")}
@@ -133,9 +131,9 @@ dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
 .scene[data-art^="l2-"] .actor{position:absolute;inset:auto 5% 5%;height:88%;margin:0;display:block;background:var(--motion) center bottom/contain no-repeat}
 .scene[data-art^="l2-"] .actor > span{display:none}
 @media(prefers-reduced-motion:reduce){.scene[data-art^="l2-"] .actor{background-image:var(--still)}}
-.scene[data-art="l2-1"]{--motion:url("./image-017.webp");--still:url("./image-018.webp")}
-.scene[data-art="l2-2"]{--motion:url("./image-019.webp");--still:url("./image-020.webp")}
-.scene[data-art="l2-3"]{--motion:url("./image-021.webp");--still:url("./image-022.webp")}
+.scene[data-art="l2-1"]{--motion:url("./level-2-room-1-hd.webp");--still:url("./level-2-room-1-still-hd.webp")}
+.scene[data-art="l2-2"]{--motion:url("./level-2-room-2-hd.webp");--still:url("./level-2-room-2-still-hd.webp")}
+.scene[data-art="l2-3"]{--motion:url("./level-2-room-3-hd.webp");--still:url("./level-2-room-3-still-hd.webp")}
 .scene[data-art="l2-1"]{--room-art:url("./image-023.webp")}
 .scene[data-art="l2-2"]{--room-art:url("./image-024.webp")}
 .scene[data-art="l2-3"]{--room-art:url("./image-025.webp")}
