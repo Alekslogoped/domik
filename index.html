@@ -63,10 +63,23 @@ h2,p{margin:0}
 .window .scene .prop{font-size:clamp(13px,min(32cqw,10dvh),78px)}
 .window .picture{border-width:2px;border-radius:3px;font-size:clamp(8px,1.5vw,15px);line-height:1}
 .shutters{position:absolute;inset:0;background:var(--shutters) center/100% 100% no-repeat;pointer-events:none;transition:opacity .2s}
-.window.revealed .scene{inset:5.75% 6.75% 6.75%;border:0}
+.window.revealed{
+  --opening-side:5.5%;
+  --opening-top:5.75%;
+  --opening-bottom:6.75%;
+}
+.window.revealed .scene{
+  inset:var(--opening-top) var(--opening-side) var(--opening-bottom);
+  border:0;
+}
+.window:focus-visible{outline:2px solid #792b43;outline-offset:2px}
 /* Keep the wooden surround from the shutter artwork and reveal the room inside. */
 .window.revealed .shutters{
-  clip-path:polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,6.75% 5.75%,6.75% 93.25%,93.25% 93.25%,93.25% 5.75%,6.75% 5.75%)
+  clip-path:polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,var(--opening-side) var(--opening-top),
+    var(--opening-side) calc(100% - var(--opening-bottom)),
+    calc(100% - var(--opening-side)) calc(100% - var(--opening-bottom)),
+    calc(100% - var(--opening-side)) var(--opening-top),
+    var(--opening-side) var(--opening-top))
 }
 .night .shutters{filter:brightness(.53) saturate(.75)}
 .zoom{display:none;position:absolute;bottom:3px;left:4px;width:19px;height:19px;border-radius:6px;background:#fff5df;color:#442f53;font-size:14px;line-height:19px}
