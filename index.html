@@ -147,8 +147,8 @@ dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
 .scene[data-art="l3-4"]{--room-art:url("./image-035.webp")}
 .scene[data-art="l3-5"]{--room-art:url("./image-036.webp")}
 
-.scene[data-art="l3-1"] .actor > span,.scene[data-art="l3-2"] .actor > span{display:none}
-.scene[data-art="l3-1"] .actor,.scene[data-art="l3-2"] .actor{position:absolute;inset:auto 3% 1%;width:94%;height:96%;margin:0;display:block;background:none;animation:none}
+.scene[data-art^="l3-"] .actor > span{display:none}
+.scene[data-art^="l3-"] .actor{position:absolute;inset:auto 3% 1%;width:94%;height:96%;margin:0;display:block;background:none;animation:none}
 .actor .animation-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;opacity:0;animation:room-frame 2.8s step-end infinite}
 .actor .animation-frame:nth-of-type(1){animation-delay:0s}
 .actor .animation-frame:nth-of-type(2){animation-delay:-2.1s}
@@ -197,7 +197,7 @@ dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
   </form>
 </dialog>
 <script>
-const roomFrames = {"l3-1": ["./image-037.png", "./image-038.png", "./image-039.png", "./image-040.png"], "l3-2": ["./image-041.png", "./image-042.png", "./image-043.png", "./image-044.png"]};
+const roomFrames = {"l3-1": ["./image-037.png", "./image-038.png", "./image-039.png", "./image-040.png"], "l3-2": ["./image-041.png", "./image-042.png", "./image-043.png", "./image-044.png"], "l3-3": ["./room-3-3-frame-1.webp", "./room-3-3-frame-2.webp", "./room-3-3-frame-3.webp", "./room-3-3-frame-4.webp"], "l3-4": ["./room-3-4-frame-1.webp", "./room-3-4-frame-2.webp", "./room-3-4-frame-3.webp", "./room-3-4-frame-4.webp"], "l3-5": ["./room-3-5-frame-1.webp", "./room-3-5-frame-2.webp", "./room-3-5-frame-3.webp", "./room-3-5-frame-4.webp"]};
 const residents = [
   ['','','','Королева играет на барабане.','#c9e6c4'],
   ['','','','Робот жарит сырники.','#f4cfdb'],
@@ -210,9 +210,9 @@ const residents = [
   ['','','','Баран слушает радио.','#f2c9bc'],
   ['','','','Король кормит кролика.','#bbdce8'],
   ['','','','Пантера смотрит телевизор.','#d9cdf1'],
-  ['🦉','🧶','🌙','Сова вяжет шарф.','#e8d7f0'],
-  ['🐨','🧼','💧','Коала моет лапки.','#c7e3d4'],
-  ['🦔','🍎','🍃','Ёжик несёт яблоко.','#efdab3']
+  ['','','','Жираф сушит рыжий парик.','#e8d7f0'],
+  ['','','','Крокодил примеряет розовые ролики.','#c7e3d4'],
+  ['','','','Морж размешивает варенье в кружке.','#efdab3']
 ];
 const layouts = [[4,2],[5,3],[5,3]];
 const byId = id => document.getElementById(id);
