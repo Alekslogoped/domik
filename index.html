@@ -1,1 +1,351 @@
 
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8ecdb">
+<title>Кто живёт в домике?</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;color:#29233d;background:#f8ecdb;font-family:"Trebuchet MS",system-ui,sans-serif}
+button{font:inherit;font-weight:700;cursor:pointer;border:0}
+button:focus-visible{outline:3px solid #ff9f34;outline-offset:4px}
+.page{max-width:1800px;margin:auto;padding:12px clamp(8px,1.5vw,22px)}
+h2,p{margin:0}
+.field-tools{position:absolute;z-index:1;top:12px;right:12px;display:flex;align-items:center;gap:8px}
+.field-tools button{min-height:44px;background:#fff8ef;color:#493567;border-radius:12px;padding:8px 14px;box-shadow:0 3px 10px #29233d24}
+.field-tools button:hover{background:#f1e7f6}
+.field-tools .full{width:44px;padding:0;font-size:25px;line-height:1}
+.rules{position:relative;background:#fff8efc7;color:#493567;border-radius:12px;box-shadow:0 3px 10px #29233d24;backdrop-filter:blur(5px)}
+.rules[open] ol{position:absolute;top:100%;left:0;width:min(270px,calc(100vw - 42px));background:#fff8efed;border-radius:12px;box-shadow:0 3px 10px #29233d24;padding-top:12px}
+.rules summary{padding:12px 14px;cursor:pointer;font-weight:800}
+.rules summary:focus-visible{outline:2px solid #792b43;outline-offset:-3px}
+.rules ol{margin:0;padding:0 14px 13px 33px;font-size:14px;line-height:1.4}
+.rules li+li{margin-top:8px}
+.game{border-radius:26px;overflow:hidden;background:#fffaf2;box-shadow:0 12px 42px #704c3020}
+.play-controls{position:absolute;z-index:2;top:12px;left:12px;right:68px;display:flex;align-items:flex-start;flex-wrap:wrap;gap:6px;pointer-events:none}
+.play-controls > *{pointer-events:auto}
+.play-controls button{min-height:44px;padding:8px 12px;border-radius:12px;color:#493567;background:#fff8efc7;backdrop-filter:blur(5px);box-shadow:0 3px 10px #29233d24}
+.play-controls button:disabled{opacity:.65;cursor:default}
+.levels{display:flex;gap:6px}
+.play-controls .level{min-width:36px;padding:8px}
+.play-controls .level[aria-pressed=true]{background:#573d82e6;color:white}
+.primary,.secondary{padding:10px 13px;border-radius:12px;background:#573d82;color:white}
+.primary:disabled{background:#e3d9e9;color:#554766;cursor:default}
+.secondary{background:#f0e7f5;color:#493567}
+.yard{position:relative;isolation:isolate;display:grid;place-items:end center;overflow:hidden;padding:69px clamp(10px,3vw,38px) 24px;min-height:max(525px,calc(100dvh - 24px));align-items:center;background:linear-gradient(#a9ddeb,#def2e6 80%,#aad3a0 80%,#89bb87);transition:background .4s}
+.night .yard{background:linear-gradient(#23234c,#504b80 80%,#384d57 80%,#293a45)}
+.sky{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.sun,.moon{position:absolute;top:65px;right:5%;border-radius:50%;width:49px;height:49px;background:#ffe093;box-shadow:0 0 26px #ffe093}
+.moon{display:none;background:#fff0b7;box-shadow:0 0 22px #fff0b777}
+.cloud{position:absolute;top:17%;left:6%;color:#ffffffad;font-size:clamp(30px,7vw,74px);line-height:1}
+.cloud.second{left:auto;right:5%;top:34%;font-size:36px}
+.stars{display:none;position:absolute;inset:15px;color:#fff2b9;font-size:20px;letter-spacing:clamp(12px,5vw,54px);text-align:center}
+.night .sun,.night .cloud{display:none}
+.night .moon,.night .stars{display:block}
+.house{position:relative;width:min(90%,1050px,max(450px,calc((100dvh - 150px) * 1.47)));aspect-ratio:1.47}
+.windows{position:absolute;inset:20.5% 9% 28%;container-type:size;display:grid;grid-template:repeat(2,minmax(0,1fr))/repeat(var(--cols,2),minmax(0,1fr));gap:7% 3%}
+.window{position:relative;min-width:0;min-height:0;width:min(100%,46.5cqh);aspect-ratio:1;place-self:center;padding:0;overflow:hidden;border-radius:4px;background:transparent}
+.windows.level-one{inset:21% 10% 6%;gap:4% 4%}
+.windows.level-one .window{width:min(100%,48cqh)}
+.windows.level-one .window:nth-child(n+3){transform:translateY(-5%)}
+.windows:is(.level-two,.level-three){inset:22% 12% 13.5%;gap:5% 2%;grid-template-columns:repeat(6,minmax(0,1fr))}
+.windows:is(.level-two,.level-three) .window{width:min(100%,47.5cqh);grid-column:span 2}
+.windows:is(.level-two,.level-three) .window:nth-child(4){grid-column:1 / span 2}
+.windows:is(.level-two,.level-three) .window:nth-child(5){grid-column:5 / span 2}
+.windows:is(.level-two,.level-three) .window:nth-child(n+4){transform:translateY(-5%)}
+.window:hover{box-shadow:0 0 0 2px #fff1c9}
+.window .scene{position:absolute;inset:2% 3%;height:auto;border-radius:0;visibility:hidden}
+.window.revealed .scene{visibility:visible}
+.window .scene .actor{position:absolute;inset:auto 4% 13%;height:68%;margin:0;justify-content:center;align-items:end;gap:3%;container-type:inline-size}
+.window .scene .resident{font-size:clamp(23px,min(52cqw,15dvh),110px)}
+.window .scene .prop{font-size:clamp(13px,min(32cqw,10dvh),78px)}
+.window .picture{border-width:2px;border-radius:3px;font-size:clamp(8px,1.5vw,15px);line-height:1}
+.shutters{position:absolute;inset:0;background:var(--shutters) center/100% 100% no-repeat;pointer-events:none;transition:opacity .2s}
+.window.revealed .shutters{opacity:0}
+.night .shutters{filter:brightness(.53) saturate(.75)}
+.zoom{display:none;position:absolute;bottom:3px;left:4px;width:19px;height:19px;border-radius:6px;background:#fff5df;color:#442f53;font-size:14px;line-height:19px}
+.window.revealed .zoom{display:block}
+.number{position:absolute;bottom:3px;right:4px;font-size:11px;border-radius:6px;background:#fff5df;color:#442f53;padding:1px 5px}
+dialog{width:min(900px,calc(100% - 20px));max-height:calc(100dvh - 24px);border:0;border-radius:23px;padding:17px;color:#29233d;background:#fffaf2;box-shadow:0 16px 55px #15112b55}
+dialog::backdrop{background:#201732a8}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.close{font-size:24px;line-height:1;padding:6px 10px;border-radius:10px;background:#efe6f4;color:#4c3669}
+.scene{position:relative;isolation:isolate;height:clamp(145px,32vh,260px);overflow:hidden;border-radius:16px;background:linear-gradient(var(--room) 0 73%,#dca981 73%);display:grid;place-items:center}
+dialog .scene{height:clamp(145px,62dvh,540px)}
+dialog .actor .resident{font-size:clamp(65px,min(23vw,32dvh),220px)}
+dialog .prop{font-size:clamp(40px,min(14vw,21dvh),155px)}
+.scene::before{content:"";position:absolute;z-index:-1;bottom:6%;left:18%;width:64%;height:21%;background:#fff0c4;border-radius:50%}
+.picture{position:absolute;top:10%;right:12%;width:18%;height:31%;background:#ffefcf;border:5px solid #ae776e;border-radius:8px;display:grid;place-items:center;font-size:clamp(16px,4vw,29px)}
+.actor{display:flex;align-items:end;gap:8px;margin-top:12%;line-height:1}
+.actor .resident{font-size:clamp(52px,13vw,106px)}
+.prop{display:inline-block;font-size:clamp(32px,8vw,70px);animation:prop 1.8s ease-in-out infinite;transform-origin:bottom center}
+.resident{display:inline-block;line-height:1;animation:bob 2.6s ease-in-out infinite;animation-delay:var(--delay,0s)}
+@keyframes bob{50%{transform:translateY(-6%) rotate(5deg)}}
+@keyframes prop{50%{transform:translateY(-10%) rotate(-9deg)}}
+.prompt{margin-top:12px;color:#544961}
+.sentence{font-size:clamp(19px,4vw,25px);margin:5px 0 13px;line-height:1.2}
+#done{width:100%}
+@media(max-width:670px){.yard{min-height:0;padding:67px 7px 17px}.house{width:100%;min-height:214px}.window .scene .resident{font-size:clamp(15px,40cqw,44px)}.window .scene .prop{font-size:clamp(10px,26cqw,30px)}.zoom,.number{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.yard{background-image:var(--courtyard);background-size:100% 100%;background-position:center bottom}
+.night .yard{background-image:linear-gradient(180deg,#141938d9,#252553b8 62%,#172740bb),var(--courtyard);background-size:100% 100%;background-position:center bottom}
+.yard .cloud{display:none}
+.yard .house{position:absolute;left:49.7%;transform:translateX(-50%);bottom:9%;width:min(89%,132cqh,1290px);min-height:0;aspect-ratio:1.418}
+.yard{height:max(525px,calc(100dvh - 24px));container-type:size}
+@media(max-width:670px){.yard{height:clamp(310px,75vw,470px)}.yard .house{width:min(94%,132cqh)}}
+.house-sign{position:absolute;left:50%;top:69%;transform:translate(-50%,-50%);padding:.24em .65em;border:1px solid #792b43;border-radius:4px;background:#ffe7af;color:#552335;box-shadow:0 2px 3px #50263255;font-size:clamp(9px,1.25vw,19px);font-weight:800;line-height:1;white-space:nowrap;pointer-events:none}
+.house::before{content:"";position:absolute;inset:0;background:var(--facade) center/100% 100% no-repeat;pointer-events:none}
+.night .house::before{filter:brightness(.56) saturate(.78)}
+:root{--courtyard:url("images/image-001.webp")}
+:root{--facade:url("images/image-002.webp");--shutters:url("images/image-003.webp")}
+
+.scene{border:clamp(1px,.25vw,3px) solid #792b43}
+.scene.painted-room{background:var(--room-art) center/cover no-repeat}
+.scene.painted-room::before,.scene.painted-room .picture{display:none}
+dialog .scene.painted-room{width:min(100%,62dvh,540px);height:auto;aspect-ratio:1;margin-inline:auto}
+dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
+.scene[data-art="1"]{--room-art:url("images/image-004.webp")}
+.scene[data-art="2"]{--room-art:url("images/image-005.webp")}
+.scene[data-art="3"]{--room-art:url("images/image-006.webp")}
+.scene[data-art="4"]{--room-art:url("images/image-007.webp")}
+.scene[data-art="1"] .actor{inset:auto 10% 6%;height:87%;margin:0;display:block;background:url("images/image-008.webp") center bottom/contain no-repeat}
+.scene[data-art="1"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){.scene[data-art="1"] .actor{background-image:url("images/image-009.webp")}}
+
+.scene[data-art="2"]::before{display:block;inset:auto auto 7% 5%;width:32%;height:44%;border-radius:0;background:url("images/image-010.webp") center bottom/contain no-repeat}
+.scene[data-art="2"] .actor{inset:auto 3% 6% 32%;height:84%;margin:0;display:block;background:url("images/image-011.webp") center bottom/contain no-repeat}
+.scene[data-art="2"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){.scene[data-art="2"] .actor{background-image:url("images/image-012.webp")}}
+
+.scene[data-art="3"] .actor{inset:auto 4% 4%;height:88%;margin:0;display:block;background:url("images/image-013.webp") center bottom/contain no-repeat}
+.scene[data-art="3"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){.scene[data-art="3"] .actor{background-image:url("images/image-014.webp")}}
+
+.scene[data-art="4"] .actor{inset:auto 3% 3%;height:88%;margin:0;display:block;background:url("images/image-015.webp") center bottom/contain no-repeat}
+.scene[data-art="4"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){.scene[data-art="4"] .actor{background-image:url("images/image-016.webp")}}
+.scene[data-art^="l2-"] .actor{position:absolute;inset:auto 5% 5%;height:88%;margin:0;display:block;background:var(--motion) center bottom/contain no-repeat}
+.scene[data-art^="l2-"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){.scene[data-art^="l2-"] .actor{background-image:var(--still)}}
+.scene[data-art="l2-1"]{--motion:url("images/image-017.webp");--still:url("images/image-018.webp")}
+.scene[data-art="l2-2"]{--motion:url("images/image-019.webp");--still:url("images/image-020.webp")}
+.scene[data-art="l2-3"]{--motion:url("images/image-021.webp");--still:url("images/image-022.webp")}
+.scene[data-art="l2-1"]{--room-art:url("images/image-023.webp")}
+.scene[data-art="l2-2"]{--room-art:url("images/image-024.webp")}
+.scene[data-art="l2-3"]{--room-art:url("images/image-025.webp")}
+.scene[data-art="l2-4"]{--room-art:url("images/image-026.webp")}
+.scene[data-art="l2-5"]{--room-art:url("images/image-027.webp")}
+.scene[data-art="l2-4"]{--motion:url("images/image-028.webp");--still:url("images/image-029.webp")}
+.scene[data-art="l2-5"]{--motion:url("images/image-030.webp");--still:url("images/image-031.webp")}
+
+.scene[data-art="l3-1"]{--room-art:url("images/image-032.webp")}
+.scene[data-art="l3-2"]{--room-art:url("images/image-033.webp")}
+.scene[data-art="l3-3"]{--room-art:url("images/image-034.webp")}
+.scene[data-art="l3-4"]{--room-art:url("images/image-035.webp")}
+.scene[data-art="l3-5"]{--room-art:url("images/image-036.webp")}
+
+.scene[data-art="l3-1"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){
+.scene[data-art="l3-2"] .actor > span{display:none}
+@media(prefers-reduced-motion:reduce){
+.scene[data-art="l3-1"] .actor,.scene[data-art="l3-2"] .actor{position:absolute;inset:auto 3% 1%;width:94%;height:96%;margin:0;display:block;background:none;animation:none}
+.actor .animation-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;opacity:0;animation:room-frame 2.8s step-end infinite}
+.actor .animation-frame:nth-of-type(1){animation-delay:0s}
+.actor .animation-frame:nth-of-type(2){animation-delay:-2.1s}
+.actor .animation-frame:nth-of-type(3){animation-delay:-1.4s}
+.actor .animation-frame:nth-of-type(4){animation-delay:-.7s}
+@keyframes room-frame{0%,24.99%{opacity:1}25%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.actor .animation-frame{animation:none;opacity:0}.actor .animation-frame:first-of-type{opacity:1}}
+</style>
+</head>
+<body>
+<main class="page">
+<section class="game" id="game">
+  <div class="yard">
+    <div class="play-controls">
+    <details class="rules"><summary>Правила</summary>
+    <ol>
+      <li><strong>Днём</strong> открой каждое окно и запомни, кто там живёт и что делает. Нажми на сценку ещё раз, чтобы рассмотреть её крупнее.</li>
+      <li>Когда откроешь все окна, нажми <strong>«Наступает ночь»</strong>. Ставни снова появятся.</li>
+      <li><strong>Ночью</strong> выбери окно и скажи целое предложение. Например, «Королева играет на барабане». Потом открой окно и проверь себя.</li>
+      <li>Проверь все окна и переходи на следующий уровень.</li>
+    </ol>
+    </details>
+    <nav class="levels" aria-label="Уровни">
+      <button class="level" type="button" data-level="0">1</button>
+      <button class="level" type="button" data-level="1">2</button>
+      <button class="level" type="button" data-level="2">3</button>
+    </nav>
+    <button id="advance" type="button">Наступает ночь</button>
+    <button id="reset" type="button">Заново</button>
+    </div>
+    <div class="field-tools">
+      <button class="full" id="full" type="button" aria-label="Во весь экран" title="Во весь экран">⛶</button>
+    </div>
+    <div class="sky" aria-hidden="true"><span class="sun"></span><span class="moon"></span><span class="cloud">☁</span><span class="cloud second">☁</span><span class="stars">✧ · ✦ · ✧ · ✦</span></div>
+    <div class="house"><div class="windows" id="windows"></div><span class="house-sign" id="house-sign">Дом 1</span></div>
+  </div>
+</section>
+</main>
+<dialog id="room" aria-labelledby="room-title">
+  <form method="dialog">
+    <div class="dialog-head"><h2 id="room-title"></h2><button type="submit" class="close" aria-label="Закрыть картинку">×</button></div>
+    <span class="scene" id="scene" role="img"><span class="picture" id="picture" aria-hidden="true"></span><span class="actor" aria-hidden="true"><span class="resident" id="hero"></span><span class="prop" id="prop"></span></span></span>
+    <p class="prompt" id="prompt"></p>
+    <p class="sentence"><strong id="sentence"></strong></p>
+    <button class="primary" id="done" type="submit">К домику</button>
+  </form>
+</dialog>
+<script>
+const roomFrames = {"l3-1": ["images/image-037.png", "images/image-038.png", "images/image-039.png", "images/image-040.png"], "l3-2": ["images/image-041.png", "images/image-042.png", "images/image-043.png", "images/image-044.png"]};
+const residents = [
+  ['','','','Королева играет на барабане.','#c9e6c4'],
+  ['','','','Робот жарит сырники.','#f4cfdb'],
+  ['','','','Барсук рисует портрет.','#f5d79e'],
+  ['','','','Краб крутит обруч.','#e0cde9'],
+  ['🐶','⚽','⭐','Зебра красит брови чёрным карандашом.','#bfe2e8'],
+  ['🐹','🧩','🔷','Пират украшает торт.','#eed7ad'],
+  ['🐼','🍵','🌼','Тигр красит свои полоски чёрной краской.','#d7e4b4'],
+  ['','','','Дракон играет на гитаре.','#d3d4f5'],
+  ['','','','Баран слушает радио.','#f2c9bc'],
+  ['','','','Король кормит кролика.','#bbdce8'],
+  ['','','','Пантера смотрит телевизор.','#d9cdf1'],
+  ['🦉','🧶','🌙','Сова вяжет шарф.','#e8d7f0'],
+  ['🐨','🧼','💧','Коала моет лапки.','#c7e3d4'],
+  ['🦔','🍎','🍃','Ёжик несёт яблоко.','#efdab3']
+];
+const layouts = [[4,2],[5,3],[5,3]];
+const byId = id => document.getElementById(id);
+const game = byId('game'), windows = byId('windows'), room = byId('room');
+const levels = [...document.querySelectorAll('.level')];
+const advance = byId('advance');
+let level, night, apartments, visited, checked;
+
+function start(index) {
+  level = index;
+  byId('house-sign').textContent = 'Дом ' + (index + 1);
+  night = false;
+  visited = new Set();
+  checked = new Set();
+  const offset = layouts.slice(0, index).reduce((total, [size]) => total + size, 0);
+  const [size,columns] = layouts[index];
+  apartments = residents.slice(offset, offset + size);
+  windows.style.setProperty('--cols', columns);
+  windows.classList.toggle('level-one', index === 0);
+  windows.classList.toggle('level-two', index === 1);
+  windows.classList.toggle('level-three', index === 2);
+  windows.replaceChildren(...apartments.map(([hero, prop, picture, , color], i) => {
+    const button = document.createElement('button');
+    button.className = 'window';
+    button.type = 'button';
+    button.style.setProperty('--delay', (i * -.31) + 's');
+    const scene = byId('scene').cloneNode(true);
+    scene.removeAttribute('id');
+    scene.removeAttribute('role');
+    scene.setAttribute('aria-hidden', 'true');
+    scene.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
+    scene.querySelector('.resident').textContent = hero;
+    scene.querySelector('.prop').textContent = prop;
+    scene.querySelector('.picture').textContent = picture;
+    scene.style.setProperty('--room', color);
+    applyRoomArt(scene, i);
+    button.append(scene);
+    button.insertAdjacentHTML('beforeend', '<span class="shutters" aria-hidden="true"></span>' +
+      '<span class="number" aria-hidden="true">' + (i + 1) + '</span>' +
+      '<span class="zoom" aria-hidden="true">⛶</span>');
+    button.addEventListener('click', () => {
+      const current = night ? checked : visited;
+      if (current.has(i)) {
+        openRoom(i);
+      } else {
+        current.add(i);
+        update();
+      }
+    });
+    return button;
+  }));
+  levels.forEach((button, i) => button.setAttribute('aria-pressed', i === index));
+  update();
+}
+
+function update() {
+  const current = night ? checked : visited;
+  const complete = current.size === apartments.length;
+  game.classList.toggle('night', night);
+  advance.textContent = night ? (level === layouts.length - 1 ? 'Сыграть ещё раз' : 'Следующий уровень') : 'Наступает ночь';
+  advance.hidden = night && !complete;
+  advance.disabled = !complete;
+  [...windows.children].forEach((button, i) => {
+    const revealed = current.has(i);
+    button.setAttribute('aria-label', 'Квартира ' + (i + 1) +
+      (revealed ? '. ' + apartments[i][3] + ' Увеличить картинку' : '. Открыть окно'));
+    button.classList.toggle('revealed', revealed);
+  });
+}
+
+function applyRoomArt(scene, index) {
+  scene.classList.add('painted-room');
+  if (level === 0) scene.dataset.art = String(index + 1);
+  else if (level === 1) scene.dataset.art = `l2-${index + 1}`;
+  else scene.dataset.art = `l3-${index + 1}`;
+  const actor = scene.querySelector('.actor');
+  actor.querySelectorAll('.animation-frame').forEach(img => img.remove());
+  for (const src of roomFrames[scene.dataset.art] || []) {
+    const img = document.createElement('img');
+    img.className = 'animation-frame';
+    img.alt = '';
+    img.src = src;
+    img.draggable = false;
+    actor.append(img);
+  }
+
+}
+
+function openRoom(index) {
+  const [hero, prop, picture, sentence, color] = apartments[index];
+  byId('room-title').textContent = 'Квартира ' + (index + 1);
+  byId('hero').textContent = hero;
+  byId('prop').textContent = prop;
+  byId('picture').textContent = picture;
+  byId('scene').style.setProperty('--room', color);
+  applyRoomArt(byId('scene'), index);
+  byId('scene').setAttribute('aria-label', sentence);
+  byId('prompt').textContent = night ? 'Сравни со своим предложением.' : 'Посмотри и скажи целым предложением.';
+  byId('sentence').textContent = sentence;
+  room.showModal();
+}
+
+levels.forEach((button, i) => button.addEventListener('click', () => start(i)));
+byId('reset').addEventListener('click', () => start(level));
+advance.addEventListener('click', () => {
+  if (night) {
+    start((level + 1) % layouts.length);
+  } else {
+    night = true;
+    update();
+    windows.firstElementChild.focus();
+  }
+});
+const full = byId('full');
+full.hidden = !document.fullscreenEnabled;
+full.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch {
+    full.title = 'Полный экран недоступен';
+  }
+});
+document.addEventListener('fullscreenchange', () => {
+  const label = document.fullscreenElement ? 'Выйти из полного экрана' : 'Во весь экран';
+  full.textContent = document.fullscreenElement ? '×' : '⛶';
+  full.setAttribute('aria-label', label);
+  full.title = label;
+});
+start(0);
+</script>
+</body>
+</html>
