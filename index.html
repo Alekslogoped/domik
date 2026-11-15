@@ -99,58 +99,55 @@ dialog .prop{font-size:clamp(40px,min(14vw,21dvh),155px)}
 .house-sign{position:absolute;left:50%;top:69%;transform:translate(-50%,-50%);padding:.24em .65em;border:1px solid #792b43;border-radius:4px;background:#ffe7af;color:#552335;box-shadow:0 2px 3px #50263255;font-size:clamp(9px,1.25vw,19px);font-weight:800;line-height:1;white-space:nowrap;pointer-events:none}
 .house::before{content:"";position:absolute;inset:0;background:var(--facade) center/100% 100% no-repeat;pointer-events:none}
 .night .house::before{filter:brightness(.56) saturate(.78)}
-:root{--courtyard:url("images/image-001.webp")}
-:root{--facade:url("images/image-002.webp");--shutters:url("images/image-003.webp")}
+:root{--courtyard:url("./image-001.webp")}
+:root{--facade:url("./image-002.webp");--shutters:url("./image-003.webp")}
 
 .scene{border:clamp(1px,.25vw,3px) solid #792b43}
 .scene.painted-room{background:var(--room-art) center/cover no-repeat}
 .scene.painted-room::before,.scene.painted-room .picture{display:none}
 dialog .scene.painted-room{width:min(100%,62dvh,540px);height:auto;aspect-ratio:1;margin-inline:auto}
 dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
-.scene[data-art="1"]{--room-art:url("images/image-004.webp")}
-.scene[data-art="2"]{--room-art:url("images/image-005.webp")}
-.scene[data-art="3"]{--room-art:url("images/image-006.webp")}
-.scene[data-art="4"]{--room-art:url("images/image-007.webp")}
-.scene[data-art="1"] .actor{inset:auto 10% 6%;height:87%;margin:0;display:block;background:url("images/image-008.webp") center bottom/contain no-repeat}
+.scene[data-art="1"]{--room-art:url("./image-004.webp")}
+.scene[data-art="2"]{--room-art:url("./image-005.webp")}
+.scene[data-art="3"]{--room-art:url("./image-006.webp")}
+.scene[data-art="4"]{--room-art:url("./image-007.webp")}
+.scene[data-art="1"] .actor{inset:auto 10% 6%;height:87%;margin:0;display:block;background:url("./image-008.webp") center bottom/contain no-repeat}
 .scene[data-art="1"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){.scene[data-art="1"] .actor{background-image:url("images/image-009.webp")}}
+@media(prefers-reduced-motion:reduce){.scene[data-art="1"] .actor{background-image:url("./image-009.webp")}}
 
-.scene[data-art="2"]::before{display:block;inset:auto auto 7% 5%;width:32%;height:44%;border-radius:0;background:url("images/image-010.webp") center bottom/contain no-repeat}
-.scene[data-art="2"] .actor{inset:auto 3% 6% 32%;height:84%;margin:0;display:block;background:url("images/image-011.webp") center bottom/contain no-repeat}
+.scene[data-art="2"]::before{display:block;inset:auto auto 7% 5%;width:32%;height:44%;border-radius:0;background:url("./image-010.webp") center bottom/contain no-repeat}
+.scene[data-art="2"] .actor{inset:auto 3% 6% 32%;height:84%;margin:0;display:block;background:url("./image-011.webp") center bottom/contain no-repeat}
 .scene[data-art="2"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){.scene[data-art="2"] .actor{background-image:url("images/image-012.webp")}}
+@media(prefers-reduced-motion:reduce){.scene[data-art="2"] .actor{background-image:url("./image-012.webp")}}
 
-.scene[data-art="3"] .actor{inset:auto 4% 4%;height:88%;margin:0;display:block;background:url("images/image-013.webp") center bottom/contain no-repeat}
+.scene[data-art="3"] .actor{inset:auto 4% 4%;height:88%;margin:0;display:block;background:url("./image-013.webp") center bottom/contain no-repeat}
 .scene[data-art="3"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){.scene[data-art="3"] .actor{background-image:url("images/image-014.webp")}}
+@media(prefers-reduced-motion:reduce){.scene[data-art="3"] .actor{background-image:url("./image-014.webp")}}
 
-.scene[data-art="4"] .actor{inset:auto 3% 3%;height:88%;margin:0;display:block;background:url("images/image-015.webp") center bottom/contain no-repeat}
+.scene[data-art="4"] .actor{inset:auto 3% 3%;height:88%;margin:0;display:block;background:url("./image-015.webp") center bottom/contain no-repeat}
 .scene[data-art="4"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){.scene[data-art="4"] .actor{background-image:url("images/image-016.webp")}}
+@media(prefers-reduced-motion:reduce){.scene[data-art="4"] .actor{background-image:url("./image-016.webp")}}
 .scene[data-art^="l2-"] .actor{position:absolute;inset:auto 5% 5%;height:88%;margin:0;display:block;background:var(--motion) center bottom/contain no-repeat}
 .scene[data-art^="l2-"] .actor > span{display:none}
 @media(prefers-reduced-motion:reduce){.scene[data-art^="l2-"] .actor{background-image:var(--still)}}
-.scene[data-art="l2-1"]{--motion:url("images/image-017.webp");--still:url("images/image-018.webp")}
-.scene[data-art="l2-2"]{--motion:url("images/image-019.webp");--still:url("images/image-020.webp")}
-.scene[data-art="l2-3"]{--motion:url("images/image-021.webp");--still:url("images/image-022.webp")}
-.scene[data-art="l2-1"]{--room-art:url("images/image-023.webp")}
-.scene[data-art="l2-2"]{--room-art:url("images/image-024.webp")}
-.scene[data-art="l2-3"]{--room-art:url("images/image-025.webp")}
-.scene[data-art="l2-4"]{--room-art:url("images/image-026.webp")}
-.scene[data-art="l2-5"]{--room-art:url("images/image-027.webp")}
-.scene[data-art="l2-4"]{--motion:url("images/image-028.webp");--still:url("images/image-029.webp")}
-.scene[data-art="l2-5"]{--motion:url("images/image-030.webp");--still:url("images/image-031.webp")}
+.scene[data-art="l2-1"]{--motion:url("./image-017.webp");--still:url("./image-018.webp")}
+.scene[data-art="l2-2"]{--motion:url("./image-019.webp");--still:url("./image-020.webp")}
+.scene[data-art="l2-3"]{--motion:url("./image-021.webp");--still:url("./image-022.webp")}
+.scene[data-art="l2-1"]{--room-art:url("./image-023.webp")}
+.scene[data-art="l2-2"]{--room-art:url("./image-024.webp")}
+.scene[data-art="l2-3"]{--room-art:url("./image-025.webp")}
+.scene[data-art="l2-4"]{--room-art:url("./image-026.webp")}
+.scene[data-art="l2-5"]{--room-art:url("./image-027.webp")}
+.scene[data-art="l2-4"]{--motion:url("./image-028.webp");--still:url("./image-029.webp")}
+.scene[data-art="l2-5"]{--motion:url("./image-030.webp");--still:url("./image-031.webp")}
 
-.scene[data-art="l3-1"]{--room-art:url("images/image-032.webp")}
-.scene[data-art="l3-2"]{--room-art:url("images/image-033.webp")}
-.scene[data-art="l3-3"]{--room-art:url("images/image-034.webp")}
-.scene[data-art="l3-4"]{--room-art:url("images/image-035.webp")}
-.scene[data-art="l3-5"]{--room-art:url("images/image-036.webp")}
+.scene[data-art="l3-1"]{--room-art:url("./image-032.webp")}
+.scene[data-art="l3-2"]{--room-art:url("./image-033.webp")}
+.scene[data-art="l3-3"]{--room-art:url("./image-034.webp")}
+.scene[data-art="l3-4"]{--room-art:url("./image-035.webp")}
+.scene[data-art="l3-5"]{--room-art:url("./image-036.webp")}
 
-.scene[data-art="l3-1"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){
-.scene[data-art="l3-2"] .actor > span{display:none}
-@media(prefers-reduced-motion:reduce){
+.scene[data-art="l3-1"] .actor > span,.scene[data-art="l3-2"] .actor > span{display:none}
 .scene[data-art="l3-1"] .actor,.scene[data-art="l3-2"] .actor{position:absolute;inset:auto 3% 1%;width:94%;height:96%;margin:0;display:block;background:none;animation:none}
 .actor .animation-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;opacity:0;animation:room-frame 2.8s step-end infinite}
 .actor .animation-frame:nth-of-type(1){animation-delay:0s}
@@ -200,7 +197,7 @@ dialog .painted-room .actor{position:absolute;bottom:12%;margin:0}
   </form>
 </dialog>
 <script>
-const roomFrames = {"l3-1": ["images/image-037.png", "images/image-038.png", "images/image-039.png", "images/image-040.png"], "l3-2": ["images/image-041.png", "images/image-042.png", "images/image-043.png", "images/image-044.png"]};
+const roomFrames = {"l3-1": ["./image-037.png", "./image-038.png", "./image-039.png", "./image-040.png"], "l3-2": ["./image-041.png", "./image-042.png", "./image-043.png", "./image-044.png"]};
 const residents = [
   ['','','','Королева играет на барабане.','#c9e6c4'],
   ['','','','Робот жарит сырники.','#f4cfdb'],
